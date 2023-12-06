@@ -1,5 +1,6 @@
 package com.sarahmartin.recettes;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +36,13 @@ public class RecipeController {
 	@GetMapping("/ingredientList/{ingredientId}")
 	public List<Recipe> findByIngredient(@PathVariable Long ingredientId) {
 		List<Recipe> recipesWithIngredient = ((List<Recipe>)recipeRepository.findAll());
+		List<Recipe> recipesToReturn = new LinkedList<Recipe>();
 		for (Recipe recipe : recipesWithIngredient) {
-			if (!recipe.getIngredientList().containsKey(ingredientId)) {
-				recipesWithIngredient.remove(recipe);
+			if (recipe.getIngredientList().containsKey(ingredientId)) {
+				recipesToReturn.add(recipe);
 			}
 		}
-		return recipesWithIngredient;
+		return recipesToReturn;
 	}
 	
 	@GetMapping("/{id}")

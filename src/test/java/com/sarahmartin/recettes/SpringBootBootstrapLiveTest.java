@@ -45,7 +45,10 @@ public class SpringBootBootstrapLiveTest {
 		recipe.setSteps(steps);
 		Map<Long, String> ingredientList = new HashMap<Long, String>();
 		for(int i = 0; i < 2; i++) {
-			ingredientList.put(createRandomIngredient().getId(), RandomStringUtils.randomAlphabetic(5));
+			Ingredient ingredient = createRandomIngredient();
+			String[] locationSplit = createIngredientAsUri(ingredient).split("/");
+			long ingredientId = Long.parseLong(locationSplit[locationSplit.length - 1]);
+			ingredientList.put(ingredientId, RandomStringUtils.randomAlphabetic(5));
 		}
 		recipe.setIngredientList(ingredientList);
 		return recipe;
@@ -148,7 +151,8 @@ public class SpringBootBootstrapLiveTest {
 		Ingredient ingredient = createRandomIngredient();
 		String location = createIngredientAsUri(ingredient);
 		ingredient.setId(Long.parseLong(location.split("api/ingredient/")[1]));
-		ingredient.setName("newIngredientName");
+		String newName = "newIngredientName" + RandomStringUtils.randomAlphabetic(5);
+		ingredient.setName(newName);
 		Response response = RestAssured.given().contentType(MediaType.APPLICATION_JSON_VALUE).body(ingredient).put(location);
 		
 		assertEquals(HttpStatus.OK.value(), response.getStatusCode());
@@ -156,7 +160,7 @@ public class SpringBootBootstrapLiveTest {
 		response = RestAssured.get(location);
 		
 		assertEquals(HttpStatus.OK.value(), response.getStatusCode());
-		assertEquals("newIngredientName", response.jsonPath().get("name"));
+		assertEquals(newName, response.jsonPath().get("name"));
 	}
 	
 	@Test
@@ -204,15 +208,22 @@ public void whenDeleteCreatedRecipe_thenOk() {
 	@Test
 	public void whenFindIngredient_thenOK() {
 		Ingredient ingredient = createRandomIngredient();
-		createIngredientAsUri(ingredient);
+		String ingredientLocation = createIngredientAsUri(ingredient);
+		String[] locationSplit = ingredientLocation.split("/");
+		long ingredientId = Long.parseLong(locationSplit[locationSplit.length - 1]);
 		Recipe recipeWith = createRandomRecipe();
-		recipeWith.getIngredientList().put(ingredient.getId(), "200g");
-		createRecipeAsUri(recipeWith);
+		recipeWith.getIngredientList().put(ingredientId, "200g");
+		String recipeLocation = createRecipeAsUri(recipeWith);
+		String[] RecipeLocationSplit = recipeLocation.split("/");
+		long recipeId = Long.parseLong(RecipeLocationSplit[RecipeLocationSplit.length - 1]);
 		Recipe recipeWithout = createRandomRecipe();
 		createRecipeAsUri(recipeWithout);
-		Response response = RestAssured.get(API_ROOT_RECIPE + "/ingredientList/" + ingredient.getId());
+		Response response = RestAssured.get(API_ROOT_RECIPE + "/ingredientList/" + ingredientId);
 		
 		assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+		List<Recipe> recipesInResponse = response.jsonPath().getList("", Recipe.class);
+		assertEquals(1, recipesInResponse.size());
+		assertEquals(recipeId, recipesInResponse.get(0).getId());
 		
 	}
 
