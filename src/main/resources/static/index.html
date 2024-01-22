@@ -8,10 +8,13 @@
     <body>
         <p id="pageTitle">Liste des recettes</p>
         <div id="recipes">
-            <div id="recipeCard"></div>
+            <div id="recipeList"></div>
         </div>
+        <script>var exports = {};</script>
         <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
         <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-        <script src="recipeCard.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <script type="text/babel" src="RecipeCard.js"></script>
+        <script type="text/babel" src="RecipeList.js"></script>
     </body>
 </html>

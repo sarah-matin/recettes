@@ -1,0 +1,36 @@
+#pageTitle {
+    text-align: center;
+    font-size: 2em;
+}
+
+.recipeCard {
+    width: 17%;
+    background-color: #EEE;
+    outline: solid #DDD;
+    border-radius: 10%;
+    display: inline-block;
+    margin: 10px;
+}
+
+.recipeTitle {
+    text-align: center;
+    margin: auto auto;
+}
+
+.recipePicture {
+    width: 75%;
+    border-radius: 40px;
+    display: block;
+    margin: 0px auto;
+    padding: 10px 0px;
+}
+
+.recipeLink:link, .recipeLink:visited {
+    text-decoration: none;
+    color:inherit;
+  }
+
+ul {
+    list-style: none;
+}
+
