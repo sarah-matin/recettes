@@ -40,13 +40,13 @@ public class Recipe {
 	
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(nullable = false)
-	private Map<Long, String> ingredientList;
+	private List<String> ingredientList;
 
-	public Map<Long, String> getIngredientList() {
+	public List<String> getIngredientList() {
 		return ingredientList;
 	}
 
-	public void setIngredientList(Map<Long, String> ingredientList) {
+	public void setIngredientList(List<String> ingredientList) {
 		this.ingredientList = ingredientList;
 	}
 	

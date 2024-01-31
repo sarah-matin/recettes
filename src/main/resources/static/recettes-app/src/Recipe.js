@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Component } from 'react';
 
 class Recipe extends Component {
     constructor(props) {

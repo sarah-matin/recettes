@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import RecipeCard from './RecipeCard';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { Link } from "react-router-dom";
 class RecipeList extends Component {
   state = {
     recipes: []
@@ -17,12 +19,17 @@ class RecipeList extends Component {
     render() {
       const {recipes} = this.state;
         return (<div id="recipeListElements">
-        <p id="pageTitle">Liste des recettes</p>
-        {recipes.map(function(recipe) {
-          return (
-            <RecipeCard recipe={recipe} key={recipe.id} />
-          )
-        })}
+          <p id="pageTitle">Liste des recettes</p>
+          {recipes.map(function(recipe) {
+            return (
+              <RecipeCard recipe={recipe} key={recipe.id} />
+            )
+          })}
+          <div id='createRecipeButton'>
+            <Link to="/create-recipe">
+              <button><FontAwesomeIcon icon={faPlus} color="green" /> Nouvelle recette</button>
+            </Link>
+          </div>
         </div>
       );
     
