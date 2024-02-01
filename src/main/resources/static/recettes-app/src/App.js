@@ -13,8 +13,6 @@ class App extends Component {
     
         <Routes>
           <Route path="/" element={<RecipeList />} />
-          {/*<Route path="/edit-user/:id" element={<EditRecipe />} /> */}
-          {/*<Route path="/user/:id" element={<Recipe />} /> */}
           <Route path="/create-recipe" element={<CreateRecipe />} />
           <Route path="/show-recipe" element={<ShowRecipe />} />
         </Routes>

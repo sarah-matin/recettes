@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { useRef, useState, useReducer } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Navigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
 export default function CreateRecipe() {
     const recipe = useRef(useLocation().state);
-    const [ingredientInputs, setIngredientInputs] = useState([""]);
-    const [stepInputs, setStepInputs] = useState([""]);
+    const [ingredientInputs, setIngredientInputs] = useState(recipe.current === null ? [""] : recipe.current.ingredientList);
+    const [stepInputs, setStepInputs] = useState(recipe.current === null ? [""] : recipe.current.steps);
     const [, forceUpdate] = useReducer(x => x + 1, 0)
     const redirect = useRef(false);
 
@@ -64,12 +63,19 @@ export default function CreateRecipe() {
                 console.log(error);
               });
         } else {
-            axios.put().put("/api/recipe/" + recipe.current.id, recipe.current).then(function (response) {
+            let API_URL = "/api/recipe/" + recipe.current.id;
+            axios({method: "put", url: API_URL, data: recipe.current}).then(function (response) {
                 console.log(response);
               })
               .catch(function (error) {
                 console.log(error);
               });
+            // axios.put().put(API_URL, recipe.current).then(function (response) {
+            //     console.log(response);
+            //   })
+            //   .catch(function (error) {
+            //     console.log(error);
+            //   });
         }
         redirect.current = true;
         forceUpdate();
@@ -79,6 +85,9 @@ export default function CreateRecipe() {
         <div className="recipeCreation" >
         {redirect.current && <Navigate to="/" replace={true} />}
             <div>
+                <Link to="/" state={recipe}>
+                    <button id="returnButton">Retour</button>
+                </Link>
                 <h1>Titre de la recette</h1>
                 <input type="text" id="recipeTitle" defaultValue={recipe.current.name} onChange={e => updateRecipeName(e.target.value)} />
             </div>
@@ -88,7 +97,7 @@ export default function CreateRecipe() {
                     {ingredientInputs.map((ingredient, i) => { return(
                         <div>
                             <input type="text" name={"ingredient" + i} id={"ingredient" + i} key={"ingredient" + i} value={ingredient} onChange={e => handleIngredientInputChange(e, i)} />
-                            {ingredientInputs.length !== 1 && <button className="mr10" onClick={() => handleRemoveIngredient(i)}>Remove</button>}
+                            {ingredientInputs.length !== 1 && <button className="mr10" key={"buttonIngredient" + i} onClick={() => handleRemoveIngredient(i)}>Remove</button>}
                         </div>
                     )})}
                 </ul>
@@ -100,7 +109,7 @@ export default function CreateRecipe() {
                     {stepInputs.map((step, i) => { return (
                         <div>
                             <input type="text" name={"step" + i} id={"step" + i} key={"step" + i} value={step} onChange={e => handleStepInputChange(e, i)} />
-                            {stepInputs.length !== 1 && <button className="mr10" onClick={() => handleRemoveStep(i)}>Remove</button>}
+                            {stepInputs.length !== 1 && <button className="mr10" key={"buttonStep" + i} onClick={() => handleRemoveStep(i)}>Remove</button>}
                         </div>
                     )})}
                 </ul>
